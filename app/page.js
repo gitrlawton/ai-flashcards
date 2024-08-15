@@ -1,8 +1,7 @@
-'use client'
 import getStripe from '../utils/get-stripe';
-import Head from 'next/head';
 import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { Box, Typography, Button, Container, AppBar, Toolbar, Grid } from '@mui/material'
+import Head from 'next/head';
 
 export default function Home() {
   return (
@@ -16,8 +15,8 @@ export default function Home() {
         <Toolbar>
           <Typography variant="h6" style={{flexGrow: 1}}>Flashcard SaaS</Typography>
           <SignedOut>
-            <Button color="inherit">Login</Button>
-            <Button color="inherit">Sign Up</Button>
+            <Button color="inherit" href="/sign-in">Login</Button>
+            <Button color="inherit" href="/sign-up">Sign Up</Button>
           </SignedOut>
           <SignedIn>
             <UserButton />
