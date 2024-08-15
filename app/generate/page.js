@@ -190,7 +190,6 @@ export default function Generate() {
                     </Box>
                 </Box>
             )}
-
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Save Flashcards</DialogTitle>
                 <DialogContent>
