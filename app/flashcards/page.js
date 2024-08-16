@@ -40,7 +40,7 @@ export default function Flashcards() {
         router.push(`/flashcard?id=${id}`)
     }
 
-    return(
+    return (
         <Container maxWidth="100vw">
             <Grid container spacing={3} sx={{mt: 4}}>
                 {flashcards.map((flashcard, index) => (

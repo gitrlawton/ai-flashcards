@@ -1,6 +1,6 @@
 'use client'
 import getStripe from '../utils/get-stripe';
-import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import { SignedIn, SignedOut, UserButton, useAuth, RedirectToSignIn } from '@clerk/nextjs';
 import { Box, Typography, Button, Container, AppBar, Toolbar, Grid } from '@mui/material'
 import Head from 'next/head';
 

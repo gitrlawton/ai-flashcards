@@ -64,7 +64,7 @@ const ResultPage = () => {
             {
                 session.payment_status === "paid" ? (
                     <>
-                        <Typograpohy variant="h4">Thank you for purchasing</Typograpohy>
+                        <Typography variant="h4">Thank you for purchasing</Typography>
                         <Box
                             sx={{mt: 22}}
                         >
