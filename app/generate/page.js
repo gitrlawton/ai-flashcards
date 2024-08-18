@@ -1,13 +1,16 @@
 // This page is in charge of generating Flashcards.
+
 'use client'
 import { useUser } from '@clerk/nextjs';
-import { db } from '@/firebase';
+import { db } from "@/firebase";
 import { Container, Box, Typography, Paper, TextField, Button, Grid, Card } from '@mui/material';
 import { CardActionArea, CardContent } from '@mui/material';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { writeBatch, doc, getDoc, setDoc, collection } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import React, { useState } from 'react';
+// Import FileUpload component.
+import FileUpload from '@/components/FileUpload';
 
 export default function Generate() {
     const {isLoaded, isSignedIn, user} = useUser()
@@ -17,14 +20,27 @@ export default function Generate() {
     const [name, setName] = useState('')
     const [open, setOpen] = useState(false)
     const router = useRouter()
+    // State to manage FileUpload visibility
+    const [showFileUpload, setShowFileUpload] = useState(true); 
 
-    // Submit out text to generate flashcards.
+    // Helper function to handle PDF-generated flashcards.
+    const handleFlashcardsGenerated = (generatedFlashcards) => {
+        setFlashcards(generatedFlashcards);
+        // Hide FileUpload component once cards are shown.
+        setShowFileUpload(false); 
+    };
+
+    // Submit text to generate flashcards.
     const handleSubmit = async () => {
         fetch('api/generate', {
             method: 'POST',
             body: text
         }).then((res) => res.json())
-        .then((data) => setFlashcards(data))
+        .then((data) => {
+            setFlashcards(data)
+            // Hide FileUpload component after flashcards are generated.
+            setShowFileUpload(false)
+        })
     }
 
     const handleCardClick = (id) => {
@@ -211,6 +227,9 @@ export default function Generate() {
                     <Button onClick={saveFlashcards}>Save</Button>
                 </DialogActions>
             </Dialog>
+            {showFileUpload ? (
+                <FileUpload onFlashcardsGenerated={handleFlashcardsGenerated} />
+            ) : <></>}
         </Container>
     )
 }

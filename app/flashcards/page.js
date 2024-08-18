@@ -1,58 +1,71 @@
 // Show all the flashcards we have in our firebase database.
-
 'use client'
+
 import { useUser } from '@clerk/nextjs';
-import { useEffect, useState } from 'react';
-import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
-import { Container, Typography, Grid, Card, CardActionArea, CardContent } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { doc, getDoc, setDoc, collection } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { useRouter } from 'next/navigation';
+import { Container, Grid, Card, CardActionArea, CardContent, Typography } from '@mui/material';
 
 export default function Flashcards() {
-    const {isLoaded, isSignedIn, user} = useUser()
-    const [flashcards, setFlashcards] = useState([])
-    const router = useRouter()
+    const { isLoaded, isSignedIn, user } = useUser();
+    const [flashcards, setFlashcards] = useState([]);
+    const router = useRouter();
 
     useEffect(() => {
         async function getFlashcards() {
-            if (!user) return
+            if (!user) return;
 
-            const docRef = doc(collection(db, 'users'), user.id)
-            const docSnap = await getDoc(docRef)
+            const docRef = doc(collection(db, 'users'), user.id);
+            const docSnap = await getDoc(docRef);
 
             if (docSnap.exists()) {
-                const collections = docSnap.data().flashcards || []
-                setFlashcards(collections)
-            }
-            else {
-                await setDoc(docRef, {flashcards: []})
+                const collections = docSnap.data().flashcards || [];
+                console.log(collections);
+                setFlashcards(collections);
+            } else {
+                await setDoc(docRef, { flashcards: [] });
             }
         }
 
-        getFlashcards()
-    }, [user])
+        getFlashcards();
+    }, [user]);
 
     if (!isLoaded || !isSignedIn) {
-        return <></>
+        return <></>;
     }
 
     const handleCardClick = (id) => {
-        router.push(`/flashcard?id=${id}`)
-    }
+        router.push(`/flashcard?id=${id}`);
+    };
 
     return (
-        <Container maxWidth="100vw">
-            <Grid container spacing={3} sx={{mt: 4}}>
+        <Container 
+            maxWidth="100vw"
+            sx={{ 
+                backgroundColor: '#fce4ec', // Pastel Pink background
+                minHeight: '100vh', 
+                p: 3 
+            }}
+        >
+            <Typography variant="h4" sx={{ color: '#333333' }}>
+                Your Library
+            </Typography>
+            <Grid container spacing={3} sx={{ mt: 4 }}>
                 {flashcards.map((flashcard, index) => (
                     <Grid item xs={12} sm={6} md={4} key={index}>
-                        <Card>
-                            <CardActionArea 
-                                onClick={() => {
-                                    handleCardClick(flashcard.name) 
-                                }}
-                            >
+                        <Card
+                            sx={{
+                                borderRadius: '12px', // Smooth corners
+                                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                                border: `2px solid ${index % 2 === 0 ? 'rgba(209, 196, 233, 0.5)' : 'rgba(255, 182, 193, 0.5)'}`, // Alternating pastel purple/pink border
+                                backgroundColor: '#ffffff', // White background for the outer box
+                            }}
+                        >
+                            <CardActionArea onClick={() => handleCardClick(flashcard.name)}>
                                 <CardContent>
-                                    <Typography variant="h6">
+                                    <Typography variant="h6" sx={{ color: '#333333' }}>
                                         {flashcard.name}
                                     </Typography>
                                 </CardContent>
@@ -62,5 +75,5 @@ export default function Flashcards() {
                 ))}
             </Grid>
         </Container>
-    )
+    );
 }
