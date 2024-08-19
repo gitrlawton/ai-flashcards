@@ -2,14 +2,14 @@
 
 'use client'
 import { useUser } from '@clerk/nextjs';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { useSearchParams } from 'next/navigation';
 import { Container, Box, Typography, Button, Grid, Card } from '@mui/material';
 import { CardActionArea, CardContent } from '@mui/material';
 
-export default function Flashcard() {
+function FlashcardContent() {
     const {isLoaded, isSignedIn, user} = useUser()
     const [flashcards, setFlashcards] = useState([])
     const [flipped, setFlipped] = useState([])
@@ -114,5 +114,13 @@ export default function Flashcard() {
                 ))}
             </Grid>
         </Container>
+    )
+}
+
+export default function Flashcard() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <FlashcardContent />
+        </Suspense>
     )
 }

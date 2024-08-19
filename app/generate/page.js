@@ -20,14 +20,10 @@ export default function Generate() {
     const [name, setName] = useState('')
     const [open, setOpen] = useState(false)
     const router = useRouter()
-    // State to manage FileUpload visibility
-    const [showFileUpload, setShowFileUpload] = useState(true); 
 
     // Helper function to handle PDF-generated flashcards.
     const handleFlashcardsGenerated = (generatedFlashcards) => {
         setFlashcards(generatedFlashcards);
-        // Hide FileUpload component once cards are shown.
-        setShowFileUpload(false); 
     };
 
     // Submit text to generate flashcards.
@@ -38,8 +34,6 @@ export default function Generate() {
         }).then((res) => res.json())
         .then((data) => {
             setFlashcards(data)
-            // Hide FileUpload component after flashcards are generated.
-            setShowFileUpload(false)
         })
     }
 
@@ -222,14 +216,14 @@ export default function Generate() {
                         variant="outlined"
                     />
                 </DialogContent>
-                <DialogActions>
+                <DialogActions >
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button onClick={saveFlashcards}>Save</Button>
                 </DialogActions>
             </Dialog>
-            {showFileUpload ? (
+            <Box sx={{ mt: 4 }}>
                 <FileUpload onFlashcardsGenerated={handleFlashcardsGenerated} />
-            ) : <></>}
+            </Box>
         </Container>
     )
 }

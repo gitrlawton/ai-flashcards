@@ -1,13 +1,13 @@
 // Handle the results of our Stripe call
 
 'use client'
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import getStripe from '@/utils/get-stripe';
 import { Box, Typography, Container, CircularProgress } from '@mui/material'
 import { useSearchParams } from 'next/navigation';
 
-const ResultPage = () => {
+const ResultPageContent = () => {
     const router = useRouter()
     const searchParams = useSearchParams()
     const session_id = searchParams.get('session_id')
@@ -91,6 +91,14 @@ const ResultPage = () => {
                 )
             }
         </Container>
+    )
+}
+
+const ResultPage = () => {
+    return (
+        <Suspense fallback={<CircularProgress />}>
+            <ResultPageContent />
+        </Suspense>
     )
 }
 
